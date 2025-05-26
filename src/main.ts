@@ -3,18 +3,21 @@ import { Application } from 'pixi.js';
 import { MapScene } from './scenes/MapScene';
 
 const app = new Application();
-await app.init({
-    width: window.innerWidth,
-    height: window.innerHeight,
-    resizeTo: window,
-    backgroundColor: 0x010101
-});
 
-document.body.appendChild(app.canvas);
+async function init() {
+    await app.init({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        resizeTo: window,
+        backgroundColor: 0x010101
+    });
 
-const mapScene = new MapScene(app.stage);
-mapScene.init();
-fitToWindow(app);
+    document.body.appendChild(app.canvas);
+
+    const mapScene = new MapScene(app.stage);
+    await mapScene.init();
+    fitToWindow(app);
+}
 
 function fitToWindow(app: Application) {
     function resize() {
@@ -37,3 +40,7 @@ function fitToWindow(app: Application) {
     window.addEventListener('resize', resize);
     resize();
 }
+
+init().catch(err => {
+    console.error('Ошибка инициализации приложения:', err);
+});
